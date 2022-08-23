@@ -1,0 +1,15 @@
+启动测试
+./skynet examples/config | tee skynet.log
+
+
+测试 test_base/mongodb 目录下代码
+./skynet test_base/mongodb/config
+
+
+测试 test_base/simple_net 目录下代码
+./skynet test_base/simple_net/config
+./3rd/lua/lua test_base/simple_net/client.lua
+
+
+测试 test_base/coroutine 目录下代码
+./skynet test_base/coroutine/config

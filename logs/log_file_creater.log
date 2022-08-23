@@ -1,0 +1,52 @@
+26/07/22 11:24:56.15 [:00000002] LAUNCH snlua bootstrap
+26/07/22 11:24:56.19 [:00000003] LAUNCH snlua launcher
+26/07/22 11:24:56.20 [:00000004] LAUNCH snlua cdummy
+26/07/22 11:24:56.20 [:00000005] LAUNCH harbor 0 4
+26/07/22 11:24:56.21 [:00000006] LAUNCH snlua datacenterd
+26/07/22 11:24:56.21 [:00000007] LAUNCH snlua service_mgr
+26/07/22 11:24:56.22 [:00000008] LAUNCH snlua log_file_creater
+26/07/22 11:25:56.22 [:00000008] KILL self
+26/07/22 11:25:56.22 [:00000002] KILL self
+26/07/22 11:43:11.42 [:00000002] LAUNCH snlua bootstrap
+26/07/22 11:43:11.42 [:00000003] LAUNCH snlua launcher
+26/07/22 11:43:11.42 [:00000004] LAUNCH snlua cdummy
+26/07/22 11:43:11.43 [:00000005] LAUNCH harbor 0 4
+26/07/22 11:43:11.43 [:00000006] LAUNCH snlua datacenterd
+26/07/22 11:43:11.43 [:00000007] LAUNCH snlua service_mgr
+26/07/22 11:43:11.43 [:00000008] LAUNCH snlua log_file_creater
+26/07/22 11:43:11.43 [:00000008] init service failed: ./test_base/log_file/log_file_creater.lua:13: attempt to index a number value (local 'time')
+stack traceback:
+	./test_base/log_file/log_file_creater.lua:13: in upvalue 'format_time'
+	./test_base/log_file/log_file_creater.lua:43: in method 'file_key'
+	./test_base/log_file/log_file_creater.lua:54: in method 'create_file'
+	./test_base/log_file/log_file_creater.lua:27: in method 'init'
+	./test_base/log_file/log_file_creater.lua:75: in upvalue 'test'
+	./test_base/log_file/log_file_creater.lua:79: in upvalue 'start'
+	./lualib/skynet.lua:936: in function <./lualib/skynet.lua:934>
+	[C]: in function 'xpcall'
+	./lualib/skynet.lua:938: in function 'skynet.init_service'
+	./lualib/skynet.lua:951: in upvalue 'f'
+	./lualib/skynet.lua:253: in function <./lualib/skynet.lua:252>
+26/07/22 11:43:11.43 [:00000008] KILL self
+26/07/22 11:43:11.43 [:00000002] KILL self
+26/07/22 11:44:59.60 [:00000002] LAUNCH snlua bootstrap
+26/07/22 11:44:59.60 [:00000003] LAUNCH snlua launcher
+26/07/22 11:44:59.60 [:00000004] LAUNCH snlua cdummy
+26/07/22 11:44:59.60 [:00000005] LAUNCH harbor 0 4
+26/07/22 11:44:59.60 [:00000006] LAUNCH snlua datacenterd
+26/07/22 11:44:59.60 [:00000007] LAUNCH snlua service_mgr
+26/07/22 11:44:59.60 [:00000008] LAUNCH snlua log_file_creater
+26/07/22 11:48:53.99 [:00000002] LAUNCH snlua bootstrap
+26/07/22 11:48:53.99 [:00000003] LAUNCH snlua launcher
+26/07/22 11:48:53.99 [:00000004] LAUNCH snlua cdummy
+26/07/22 11:48:53.99 [:00000005] LAUNCH harbor 0 4
+26/07/22 11:48:53.99 [:00000006] LAUNCH snlua datacenterd
+26/07/22 11:48:53.99 [:00000007] LAUNCH snlua service_mgr
+26/07/22 11:48:54.00 [:00000008] LAUNCH snlua log_file_creater
+26/07/22 12:03:28.66 [:00000002] LAUNCH snlua bootstrap
+26/07/22 12:03:28.66 [:00000003] LAUNCH snlua launcher
+26/07/22 12:03:28.66 [:00000004] LAUNCH snlua cdummy
+26/07/22 12:03:28.66 [:00000005] LAUNCH harbor 0 4
+26/07/22 12:03:28.66 [:00000006] LAUNCH snlua datacenterd
+26/07/22 12:03:28.66 [:00000007] LAUNCH snlua service_mgr
+26/07/22 12:03:28.67 [:00000008] LAUNCH snlua log_file_creater

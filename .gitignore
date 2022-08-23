@@ -10,3 +10,6 @@
 *.dSYM
 .DS_Store
 .idea
+logs
+test_file
+test_file/log

@@ -1,0 +1,273 @@
+23/08/22 10:30:47.68 [:00000002] LAUNCH snlua bootstrap
+23/08/22 10:30:47.73 [:00000003] LAUNCH snlua launcher
+23/08/22 10:30:47.73 [:00000004] LAUNCH snlua cdummy
+23/08/22 10:30:47.73 [:00000005] LAUNCH harbor 0 4
+23/08/22 10:30:47.74 [:00000006] LAUNCH snlua datacenterd
+23/08/22 10:30:47.74 [:00000007] LAUNCH snlua service_mgr
+23/08/22 10:30:47.75 [:00000008] LAUNCH snlua main
+23/08/22 10:30:47.75 [:00000008] init service failed: test_base/call_back/main.lua:7: attempt to call a nil value (global 'LOG_INFO')
+stack traceback:
+	test_base/call_back/main.lua:7: in upvalue 'start'
+	./lualib/skynet.lua:936: in function <./lualib/skynet.lua:934>
+	[C]: in function 'xpcall'
+	./lualib/skynet.lua:938: in function 'skynet.manager.init_service'
+	./lualib/skynet.lua:951: in upvalue 'f'
+	./lualib/skynet.lua:253: in function <./lualib/skynet.lua:252>
+23/08/22 10:30:47.76 [:00000008] KILL self
+23/08/22 10:30:47.76 [:00000002] KILL self
+23/08/22 10:31:27.66 [:00000002] LAUNCH snlua bootstrap
+23/08/22 10:31:27.66 [:00000003] LAUNCH snlua launcher
+23/08/22 10:31:27.66 [:00000004] LAUNCH snlua cdummy
+23/08/22 10:31:27.66 [:00000005] LAUNCH harbor 0 4
+23/08/22 10:31:27.66 [:00000006] LAUNCH snlua datacenterd
+23/08/22 10:31:27.66 [:00000007] LAUNCH snlua service_mgr
+23/08/22 10:31:27.66 [:00000008] LAUNCH snlua main
+23/08/22 10:31:27.67 [:00000009] LAUNCH snlua debug_console 8000
+23/08/22 10:31:27.69 [:00000009] Start debug console at 127.0.0.1:8000
+23/08/22 10:31:27.69 [:0000000a] LAUNCH snlua call_back_service
+23/08/22 10:31:27.69 [:00000008] KILL self
+23/08/22 10:31:27.69 [:00000002] KILL self
+23/08/22 10:54:59.58 [:00000002] LAUNCH snlua bootstrap
+23/08/22 10:54:59.59 [:00000003] LAUNCH snlua launcher
+23/08/22 10:54:59.59 [:00000004] LAUNCH snlua cdummy
+23/08/22 10:54:59.59 [:00000005] LAUNCH harbor 0 4
+23/08/22 10:54:59.59 [:00000006] LAUNCH snlua datacenterd
+23/08/22 10:54:59.59 [:00000007] LAUNCH snlua service_mgr
+23/08/22 10:54:59.59 [:00000008] LAUNCH snlua main
+23/08/22 10:54:59.60 [:00000009] LAUNCH snlua call_back_service
+23/08/22 10:54:59.60 [:00000008] KILL self
+23/08/22 10:54:59.60 [:00000002] KILL self
+23/08/22 10:54:59.60 [:00000009] lua call [0 to :9 : 1 msgsz = 0] error : [31m./lualib/skynet.lua:859: ./lualib/skynet.lua:330: test_base/call_back/call_back_service.lua:17: attempt to call a nil value (field 'io')
+stack traceback:
+	test_base/call_back/call_back_service.lua:17: in upvalue 'handle_io'
+	test_base/call_back/call_back_service.lua:30: in upvalue 'f'
+	./lualib/skynet.lua:253: in function <./lualib/skynet.lua:252>
+stack traceback:
+	[C]: in function 'assert'
+	./lualib/skynet.lua:859: in function 'skynet.manager.dispatch_message'[0m
+23/08/22 10:55:58.51 [:00000002] LAUNCH snlua bootstrap
+23/08/22 10:55:58.51 [:00000003] LAUNCH snlua launcher
+23/08/22 10:55:58.51 [:00000004] LAUNCH snlua cdummy
+23/08/22 10:55:58.51 [:00000005] LAUNCH harbor 0 4
+23/08/22 10:55:58.51 [:00000006] LAUNCH snlua datacenterd
+23/08/22 10:55:58.52 [:00000007] LAUNCH snlua service_mgr
+23/08/22 10:55:58.52 [:00000008] LAUNCH snlua main
+23/08/22 10:55:58.52 [:00000009] LAUNCH snlua call_back_service
+23/08/22 10:55:58.52 [:00000008] KILL self
+23/08/22 10:55:58.52 [:00000002] KILL self
+23/08/22 10:56:55.60 [:00000002] LAUNCH snlua bootstrap
+23/08/22 10:56:55.60 [:00000003] LAUNCH snlua launcher
+23/08/22 10:56:55.60 [:00000004] LAUNCH snlua cdummy
+23/08/22 10:56:55.60 [:00000005] LAUNCH harbor 0 4
+23/08/22 10:56:55.60 [:00000006] LAUNCH snlua datacenterd
+23/08/22 10:56:55.61 [:00000007] LAUNCH snlua service_mgr
+23/08/22 10:56:55.61 [:00000008] LAUNCH snlua main
+23/08/22 10:56:55.61 [:00000009] LAUNCH snlua call_back_service
+23/08/22 10:56:55.61 [:00000008] KILL self
+23/08/22 10:56:55.61 [:00000002] KILL self
+23/08/22 10:57:43.97 [:00000002] LAUNCH snlua bootstrap
+23/08/22 10:57:43.97 [:00000003] LAUNCH snlua launcher
+23/08/22 10:57:43.97 [:00000004] LAUNCH snlua cdummy
+23/08/22 10:57:43.97 [:00000005] LAUNCH harbor 0 4
+23/08/22 10:57:43.97 [:00000006] LAUNCH snlua datacenterd
+23/08/22 10:57:43.97 [:00000007] LAUNCH snlua service_mgr
+23/08/22 10:57:43.97 [:00000008] LAUNCH snlua main
+23/08/22 10:57:43.97 [:00000009] LAUNCH snlua call_back_service
+23/08/22 10:57:43.98 [:00000008] KILL self
+23/08/22 10:57:43.98 [:00000002] KILL self
+23/08/22 10:58:32.58 [:00000002] LAUNCH snlua bootstrap
+23/08/22 10:58:32.58 [:00000003] LAUNCH snlua launcher
+23/08/22 10:58:32.58 [:00000004] LAUNCH snlua cdummy
+23/08/22 10:58:32.58 [:00000005] LAUNCH harbor 0 4
+23/08/22 10:58:32.58 [:00000006] LAUNCH snlua datacenterd
+23/08/22 10:58:32.58 [:00000007] LAUNCH snlua service_mgr
+23/08/22 10:58:32.59 [:00000008] LAUNCH snlua main
+23/08/22 10:58:32.59 [:00000009] LAUNCH snlua call_back_service
+23/08/22 10:58:32.59 [:00000008] KILL self
+23/08/22 10:58:32.59 [:00000002] KILL self
+23/08/22 11:00:33.76 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:00:33.76 [:00000003] LAUNCH snlua launcher
+23/08/22 11:00:33.76 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:00:33.76 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:00:33.76 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:00:33.76 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:00:33.76 [:00000008] LAUNCH snlua main
+23/08/22 11:00:33.77 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:00:33.77 [:00000008] KILL self
+23/08/22 11:00:33.77 [:00000002] KILL self
+23/08/22 11:01:19.73 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:01:19.73 [:00000003] LAUNCH snlua launcher
+23/08/22 11:01:19.73 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:01:19.74 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:01:19.74 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:01:19.74 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:01:19.74 [:00000008] LAUNCH snlua main
+23/08/22 11:01:19.74 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:01:19.74 [:00000008] KILL self
+23/08/22 11:01:19.74 [:00000002] KILL self
+23/08/22 11:02:09.20 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:02:09.20 [:00000003] LAUNCH snlua launcher
+23/08/22 11:02:09.20 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:02:09.20 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:02:09.20 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:02:09.20 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:02:09.21 [:00000008] LAUNCH snlua main
+23/08/22 11:02:09.21 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:02:09.21 [:00000008] KILL self
+23/08/22 11:02:09.21 [:00000002] KILL self
+23/08/22 11:02:19.57 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:02:19.57 [:00000003] LAUNCH snlua launcher
+23/08/22 11:02:19.57 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:02:19.57 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:02:19.57 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:02:19.57 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:02:19.57 [:00000008] LAUNCH snlua main
+23/08/22 11:02:19.58 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:02:19.58 [:00000008] KILL self
+23/08/22 11:02:19.58 [:00000002] KILL self
+23/08/22 11:02:36.43 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:02:36.43 [:00000003] LAUNCH snlua launcher
+23/08/22 11:02:36.43 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:02:36.43 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:02:36.43 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:02:36.43 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:02:36.43 [:00000008] LAUNCH snlua main
+23/08/22 11:02:36.44 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:02:36.44 [:00000008] KILL self
+23/08/22 11:02:36.44 [:00000002] KILL self
+23/08/22 11:04:02.45 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:04:02.45 [:00000003] LAUNCH snlua launcher
+23/08/22 11:04:02.45 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:04:02.45 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:04:02.45 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:04:02.45 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:04:02.45 [:00000008] LAUNCH snlua main
+23/08/22 11:04:02.45 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:04:02.46 [:00000009] lua call [0 to :9 : 1 msgsz = 0] error : [31m./lualib/skynet.lua:859: ./lualib/skynet.lua:330: test_base/call_back/call_back_service.lua:12: attempt to concatenate a thread value (local 'token')
+stack traceback:
+	test_base/call_back/call_back_service.lua:12: in upvalue 'handle_io'
+	test_base/call_back/call_back_service.lua:33: in upvalue 'f'
+	./lualib/skynet.lua:253: in function <./lualib/skynet.lua:252>
+stack traceback:
+	[C]: in function 'assert'
+	./lualib/skynet.lua:859: in function 'skynet.manager.dispatch_message'[0m
+23/08/22 11:04:02.46 [:00000008] KILL self
+23/08/22 11:04:02.46 [:00000002] KILL self
+23/08/22 11:04:13.49 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:04:13.50 [:00000003] LAUNCH snlua launcher
+23/08/22 11:04:13.50 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:04:13.50 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:04:13.50 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:04:13.50 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:04:13.50 [:00000008] LAUNCH snlua main
+23/08/22 11:04:13.50 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:04:13.50 [:00000009] lua call [0 to :9 : 1 msgsz = 0] error : [31m./lualib/skynet.lua:859: ./lualib/skynet.lua:330: test_base/call_back/call_back_service.lua:12: attempt to concatenate a thread value (local 'token')
+stack traceback:
+	test_base/call_back/call_back_service.lua:12: in upvalue 'handle_io'
+	test_base/call_back/call_back_service.lua:33: in upvalue 'f'
+	./lualib/skynet.lua:253: in function <./lualib/skynet.lua:252>
+stack traceback:
+	[C]: in function 'assert'
+	./lualib/skynet.lua:859: in function 'skynet.dispatch_message'[0m
+23/08/22 11:04:13.50 [:00000008] KILL self
+23/08/22 11:04:13.50 [:00000002] KILL self
+23/08/22 11:04:35.04 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:04:35.04 [:00000003] LAUNCH snlua launcher
+23/08/22 11:04:35.04 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:04:35.04 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:04:35.04 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:04:35.04 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:04:35.04 [:00000008] LAUNCH snlua main
+23/08/22 11:04:35.05 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:04:35.05 [:00000008] KILL self
+23/08/22 11:04:35.05 [:00000002] KILL self
+23/08/22 11:05:24.05 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:05:24.05 [:00000003] LAUNCH snlua launcher
+23/08/22 11:05:24.05 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:05:24.06 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:05:24.06 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:05:24.06 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:05:24.06 [:00000008] LAUNCH snlua main
+23/08/22 11:05:24.06 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:05:24.07 [:00000008] KILL self
+23/08/22 11:05:24.07 [:00000002] KILL self
+23/08/22 11:17:03.64 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:17:03.64 [:00000003] LAUNCH snlua launcher
+23/08/22 11:17:03.64 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:17:03.64 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:17:03.64 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:17:03.64 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:17:03.64 [:00000008] LAUNCH snlua main
+23/08/22 11:17:03.64 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:17:03.65 [:00000008] KILL self
+23/08/22 11:17:03.65 [:00000002] KILL self
+23/08/22 11:17:22.31 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:17:22.31 [:00000003] LAUNCH snlua launcher
+23/08/22 11:17:22.31 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:17:22.31 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:17:22.31 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:17:22.31 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:17:22.31 [:00000008] LAUNCH snlua main
+23/08/22 11:17:22.32 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:17:22.32 [:00000008] KILL self
+23/08/22 11:17:22.32 [:00000002] KILL self
+23/08/22 11:18:00.29 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:18:00.30 [:00000003] LAUNCH snlua launcher
+23/08/22 11:18:00.30 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:18:00.30 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:18:00.30 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:18:00.30 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:18:00.30 [:00000008] LAUNCH snlua main
+23/08/22 11:18:00.30 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:18:00.30 [:00000008] KILL self
+23/08/22 11:18:00.30 [:00000002] KILL self
+23/08/22 11:18:47.36 [:00000002] LAUNCH snlua bootstrap
+23/08/22 11:18:47.37 [:00000003] LAUNCH snlua launcher
+23/08/22 11:18:47.37 [:00000004] LAUNCH snlua cdummy
+23/08/22 11:18:47.37 [:00000005] LAUNCH harbor 0 4
+23/08/22 11:18:47.37 [:00000006] LAUNCH snlua datacenterd
+23/08/22 11:18:47.37 [:00000007] LAUNCH snlua service_mgr
+23/08/22 11:18:47.37 [:00000008] LAUNCH snlua main
+23/08/22 11:18:47.37 [:00000009] LAUNCH snlua call_back_service
+23/08/22 11:18:47.38 [:00000008] KILL self
+23/08/22 11:18:47.38 [:00000002] KILL self
+23/08/22 12:13:47.17 [:00000002] LAUNCH snlua bootstrap
+23/08/22 12:13:47.17 [:00000003] LAUNCH snlua launcher
+23/08/22 12:13:47.17 [:00000004] LAUNCH snlua cdummy
+23/08/22 12:13:47.17 [:00000005] LAUNCH harbor 0 4
+23/08/22 12:13:47.17 [:00000006] LAUNCH snlua datacenterd
+23/08/22 12:13:47.18 [:00000007] LAUNCH snlua service_mgr
+23/08/22 12:13:47.18 [:00000008] LAUNCH snlua main
+23/08/22 12:13:47.18 [:00000009] LAUNCH snlua call_back_service
+23/08/22 12:13:47.18 [:00000008] KILL self
+23/08/22 12:13:47.18 [:00000002] KILL self
+23/08/22 12:14:24.32 [:00000002] LAUNCH snlua bootstrap
+23/08/22 12:14:24.33 [:00000003] LAUNCH snlua launcher
+23/08/22 12:14:24.33 [:00000004] LAUNCH snlua cdummy
+23/08/22 12:14:24.33 [:00000005] LAUNCH harbor 0 4
+23/08/22 12:14:24.33 [:00000006] LAUNCH snlua datacenterd
+23/08/22 12:14:24.33 [:00000007] LAUNCH snlua service_mgr
+23/08/22 12:14:24.33 [:00000008] LAUNCH snlua main
+23/08/22 12:14:24.33 [:00000009] LAUNCH snlua call_back_service
+23/08/22 12:14:24.33 [:00000008] KILL self
+23/08/22 12:14:24.33 [:00000002] KILL self
+23/08/22 12:18:10.24 [:00000002] LAUNCH snlua bootstrap
+23/08/22 12:18:10.24 [:00000003] LAUNCH snlua launcher
+23/08/22 12:18:10.24 [:00000004] LAUNCH snlua cdummy
+23/08/22 12:18:10.24 [:00000005] LAUNCH harbor 0 4
+23/08/22 12:18:10.24 [:00000006] LAUNCH snlua datacenterd
+23/08/22 12:18:10.24 [:00000007] LAUNCH snlua service_mgr
+23/08/22 12:18:10.24 [:00000008] LAUNCH snlua main
+23/08/22 12:18:10.24 [:00000009] LAUNCH snlua call_back_service
+23/08/22 12:18:10.25 [:00000008] KILL self
+23/08/22 12:18:10.25 [:00000002] KILL self
+23/08/22 12:18:45.83 [:00000002] LAUNCH snlua bootstrap
+23/08/22 12:18:45.83 [:00000003] LAUNCH snlua launcher
+23/08/22 12:18:45.83 [:00000004] LAUNCH snlua cdummy
+23/08/22 12:18:45.83 [:00000005] LAUNCH harbor 0 4
+23/08/22 12:18:45.83 [:00000006] LAUNCH snlua datacenterd
+23/08/22 12:18:45.83 [:00000007] LAUNCH snlua service_mgr
+23/08/22 12:18:45.83 [:00000008] LAUNCH snlua main
+23/08/22 12:18:45.83 [:00000009] LAUNCH snlua call_back_service
+23/08/22 12:18:45.83 [:00000008] KILL self
+23/08/22 12:18:45.83 [:00000002] KILL self
