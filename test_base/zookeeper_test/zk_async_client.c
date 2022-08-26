@@ -164,19 +164,51 @@ static int lzookeeper_init(lua_State *L) {
         fprintf(stderr, "Error when connecting to zookeeper servers... \n");
         exit(EXIT_FAILURE);
     }
-    create(zkhandle, "/abc");
-    exists(zkhandle, "/abc");
-    getACL(zkhandle, "/abc");
-    delete(zkhandle, "/abc");
+//    create(zkhandle, "/abc");
+//    exists(zkhandle, "/abc");
+//    getACL(zkhandle, "/abc");
+//    delete(zkhandle, "/abc");
 
     //轻量级用户数据，返回c指针
     lua_pushlightuserdata(L, zkhandle);
     return 1;
 }
 
-int luaopen_zk_client(lua_State *L) {
+void acreate_string_completion(int rc, const  char *name, const  void *data) {
+    fprintf(stderr, " [%s]: rc = %d \n ", (char*)(data==0?" null " :data), rc);
+     if (!rc) {
+        fprintf(stderr, " name = %s \n " , name);
+    }
+}
+
+static int lacreate(lua_State *L) {
+    zhandle_t *zkhandle = lua_touserdata(L, 1);
+    printf(">>> zkhandle %p \n", zkhandle);
+
+    size_t path_sz = 0;
+    const char *path = luaL_checklstring(L, 2, &path_sz);
+    printf(">>> path %s \n", path);
+
+    size_t value_sz = 0;
+    const char *value = luaL_checklstring(L, 3, &value_sz);
+    printf(">>> value %s \n", value);
+
+    int mode = luaL_checkinteger(L, 4);
+    printf(">>> mode %d \n", mode);
+
+    int ret = zoo_acreate(zkhandle, path, value, value_sz, &ZOO_OPEN_ACL_UNSAFE, mode, acreate_string_completion, "acreate");
+    if (ret!=ZOK) {
+        fprintf(stderr, " Error %d for %s\n ", ret, "acreate" );
+        exit(EXIT_FAILURE);
+    }else{
+        printf("created node is %s\n", path);
+    }
+}
+
+int luaopen_zk_async_client(lua_State *L) {
     luaL_Reg l[] = {
             {"zookeeper_init", lzookeeper_init},
+            {"acreate", lacreate},
             {NULL, NULL},
     };
     luaL_newlib(L, l);
