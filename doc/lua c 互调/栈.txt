@@ -1,0 +1,6 @@
+https://blog.csdn.net/yhhwatl/article/details/9303675
+
+栈顶 -1   n
+    -2   3
+    -3   2
+栈底 -n   1

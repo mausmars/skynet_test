@@ -1,0 +1,27 @@
+https://blog.csdn.net/djvc/article/details/68483734
+
+查看
+closure_test
+
+-------------------------------------------
+lua的闭包（Closure）和Upvalue
+
+关于lua的闭包（Closure）和Upvalue
+upvalue：嵌套函数的外部函数的局部变量
+function func(a) <== 这个函数返回值是一个函数
+  return function ()
+    a = a + 1    <== 这里可以访问外部函数func的局部变量a，这个变量a就是upvalue
+    return a
+  end
+end
+
+func返回一个匿名函数，可用变量接取之。该匿名函数有一个upvalue a（有点像C函数的static变量），初值为首次调用func时的参数
+
+闭包：一个匿名函数加上其可访问的upvalue
+c = func(1) <== c现在指向一个拥有upvalue a = 1的匿名函数，c也被称作一个闭包
+c()          <== 返回2
+c()          <== 返回3
+c2 = func(1) <== c2现在指向另外一个拥有upvalue a = 1的匿名函数，c2也被称作一个闭包
+c2()         <== 返回2
+
+

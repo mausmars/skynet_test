@@ -1,11 +1,5 @@
 测试lua调用c，传递回调函数，并由c回调lua
 
-https://blog.csdn.net/yhhwatl/article/details/9303675
-栈顶 -1   n
-    -2   3
-    -3   2
-栈底 -n   1
----------------------------------------------------------------------------------
 https://www.bookstack.cn/read/lua-5.3/spilt.50.spilt.1.5.md
 
 Lua提供了一个独立的被称为registry的表，C代码可以自由使用，但Lua代码不能访问他
