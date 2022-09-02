@@ -4,3 +4,29 @@ git checkout tags/v5.3.6
 
 make all test
 
+------------------------------------------------
+wget http://www.lua.org/ftp/lua-5.3.6.tar.gz
+apt-get install libreadline-dev
+
+tar -zxvf lua-5.3.6.tar.gz
+cd lua-5.3.6
+
+vi Makefile
+TO_LIB = liblua.a liblua.so
+
+cd src
+vi Makefile
+在LUA_A赋值之下增加LUA_SO
+LUA_SO = liblua.so
+修改ALL_T
+ALL_T = $(LUA_A) $(LUA_T) $(LUAC_T) $(LUA_SO)
+
+在$(LUAC_T)编译命令之下增加$(LUA_SO)
+$(LUA_SO): $(CORE_O) $(LIB_O)
+	$(CC) -o $@ -shared -fPIC $? -ldl -lm
+
+$(LUA_SO): $(CORE_O) $(LIB_O)
+	$(CC) -o $@ -shared -fPIC $? -lm
+
+make linux
+make install

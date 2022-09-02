@@ -10,7 +10,7 @@ LUA_INC = /software/lua
 start: $(TARGET)
 
 $(TARGET) : closure.c | $(LUA_CLIB_PATH)
-	$(CC) $(CFLAGS) $(SHARED) $^ -o $@ -lpthread && cp $(TARGET) ../../luaclib
+	$(CC) $(CFLAGS) $(SHARED) $^ -o $@ -lpthread
 
 clean:
 	rm -fr $(TARGET)
