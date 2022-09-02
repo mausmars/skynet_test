@@ -1,0 +1,10 @@
+-- 依赖的so 文件
+/usr/local/lib/lua/5.3/
+-- 依赖的lua 文件
+/usr/local/share/lua/5.3/
+
+--------------------------
+skynet例子
+lua_cpath = "skynet/luaclib/?.so;luaclib/?.so;/usr/local/lib/lua/5.3/?.so"
+lua_path = "bi_tool/?.lua;skynet/lualib/?.lua;lualib/?.lua;skynet/lualib/skynet/?.lua;lualib/middleclass-master/?.lua;lualib/share/?.lua;/usr/local/share/lua/5.3/?.lua"
+

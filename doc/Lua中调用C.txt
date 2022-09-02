@@ -1,0 +1,41 @@
+于此相关的C API有几个比较重要的定义如下：
+--------------------------------------------------------------------------
+1）typedef struct lua_State lua_State;
+lua虚拟机（或叫解释器），可以理解为一个thread，和一个完整的Lua虚拟环境的执行状态。
+--------------------------------------------------------------------------
+2）typedef int (*lua_CFunction) (lua_State *L);
+能够被Lua调用的C函数都必须是这种规则。函数的返回的int值表示C函数返回值的个数。
+--------------------------------------------------------------------------
+3）void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n);
+将一个C闭包压栈；
+首先将upvalues依次压栈，然后调用该函数，将c函数压栈，并将n个upvalues出栈；
+参数fn：C函数指针
+参数n：函数关联的upvalue的个数。
+--------------------------------------------------------------------------
+4）void lua_pushcfunction (lua_State *L, lua_CFunction f);
+将C函数压栈；
+接收一个C函数的指针参数，然后将一个Lua.function类型的对象压栈。
+--------------------------------------------------------------------------
+5）void lua_register (lua_State *L, const char *name, lua_CFunction f);
+注册C函数为一个全局变量；
+#define lua_register(L,n,f) (lua_pushcfunction(L, f), lua_setglobal(L, n))
+--------------------------------------------------------------------------
+6）void luaL_setfuncs (lua_State *L, const luaL_Reg *l, int nup);
+注册函数到栈顶的表中；
+参数l：luaL_Reg列表，记录了要注册的函数信息，注意，该列表以{NULL, NULL}结尾；
+nup参数：upvalue的个数，如果不为0，则注册的所有函数都共享这些upvalues；
+先将table压栈，然后将upvalues依次压栈，然后调用该函数进行函数注册。注册完毕后upvalues会出栈。
+注意：luaL_register函数已经不再使用，取而代之的是luaL_setfuncs，因为该函数不会创建全局变量。
+
+typedef struct luaL_Reg { const char *name; lua_CFunction func; } luaL_Reg;
+
+Lua可以调用C函数的能力将极大的提高Lua的可扩展性和可用性。对于有些和操作系统相关的功能，或者是对效率要求较高的模块，
+我们完全可以通过C函数来实现，之后再通过Lua调用指定的C函数。对于那些可被Lua调用的C函数而言，其接口必须遵循Lua要求的形式，
+即typedef int (*lua_CFunction)(lua_State* L)。简单说明一下，该函数类型仅仅包含一个表示Lua环境的指针作为其唯一的参数，
+实现者可以通过该指针进一步获取Lua代码中实际传入的参数。返回值是整型，表示该C函数将返回给Lua代码的返回值数量，如果没有返回值，
+则return 0即可。需要说明的是，C函数无法直接将真正的返回值返回给Lua代码，而是通过虚拟栈来传递Lua代码和C函数之间的调用参数和返回值的。
+这里我们将介绍两种Lua调用C函数的规则。
+
+--------------------------------------------------------------------------
+void *lua_newuserdata (lua_State *L, size_t size);
+lua_newuserdata 函数按照指定的大小分配一块内存，将对应的 userdatum放到栈内，并返回内存块的地址。

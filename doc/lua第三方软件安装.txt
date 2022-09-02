@@ -1,0 +1,10 @@
+apt-get install luarocks
+
+luarocks install timerwheel
+
+luarocks install luasocket
+
+INSTALL_TOP_SHARE=/usr/share/lua/5.3/
+INSTALL_TOP_LIB=/usr/local/lib/lua/5.3
+
+

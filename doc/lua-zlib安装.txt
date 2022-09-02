@@ -1,0 +1,38 @@
+apt-get install zlib1g zlib1g-dev
+apt-get install cmake
+-------------------------------------------
+需要先安装luajit
+git clone git@github.com:LuaJIT/LuaJIT.git
+cd LuaJIT
+make && make install
+-------------------------------------------
+git clone git@github.com:brimworks/lua-zlib.git
+cd lua-zlib
+git checkout tags/v1.2
+//失败了可以回滚
+git reset --hard HEAD
+
+cmake -DLUA_INCLUDE_DIR=/usr/local/include/luajit-2.1 -DLUA_LIBRARIES=/usr/local/lib -DUSE_LUAJIT=ON -DUSE_LUA=OFF
+make
+make install
+编译后，将编译 生成的 zlib.so 复制到 /usr/local/openresty/lualib/ 目录下
+
+
+local zlib = require("zlib")
+# 压缩
+local compress = zlib.deflate()(body, "finish")
+# 解压缩
+local uncompress = zlib.inflate()(compress)
+
+
+如果在使用 deflate() 方法不设置参数的话，默认得到的是 zlib 压缩内容，而不是 gzip 压缩内容，因此压缩的使用方式需要修改下：
+
+local zlib = require("zlib")
+
+-- input:  string
+-- output: string compressed with gzip
+function compress(str)
+   local level = 5
+   local windowSize = 15+16
+   return zlib.deflate(level, windowSize)(str, "finish")
+end

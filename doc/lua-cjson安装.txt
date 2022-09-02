@@ -1,0 +1,10 @@
+https://github.com/mpx/lua-cjson
+
+git clone https://github.com/mpx/lua-cjson.git
+cd lua-cjson
+git checkout tags/2.1.0
+
+修改makefile
+LUA_INCLUDE_DIR =   /usr/include/lua5.3
+
+

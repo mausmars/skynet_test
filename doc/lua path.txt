@@ -1,0 +1,7 @@
+一. package.path用于搜索自己写的库文件或者第三方的库文件
+--搜索指定路径下，以 .lua结尾的文件
+package.path = "../t/?.lua;../xjnlib/src/?.lua;"..package.path
+
+二. package.cpath用于搜索自己写的so库文件或者第三方的so库文件
+--搜索指定路径下，以.so结尾的文件
+package.cpath = "../../luaclib/?.so;"..package.cpath

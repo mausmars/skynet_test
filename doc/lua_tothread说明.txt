@@ -1,0 +1,30 @@
+https://blog.gotocoding.com/archives/345
+
+lua_tothread的使用场景
+在学习lua虚拟机与C交互过程中, 看到一个很令人奇怪的API, lua_tothread.
+lua官方手册上只是说明lua_tothread的作用是将一个thread(coroutine)以lua_State的形式表示出来, 但是总是搞不清这个API应该在什么情况下使用.
+
+在做了一些实验后, 终于有点结论了.
+
+在调用luaL_newstate函数去创建一个lua虚拟机时, lua就会自动在这个状态中创建一个新thread(coroutine), 这个线程被称为主线程. 除了调用lua_close之外, 这个主线程永远不会被回收.
+
+在lua中每个coroutine都有一个lua_State与之关联, 甚至于coroutine.create的返回值其实就是一个lua_State的指针, 这一点可以从实验得到证实, 所以lua_tothread的作用也就是与coroutine相关联的lua_State的指针返回.
+
+在lua中使用coroutine.create或在C中调用lua_newthread来创建出的coroutine在没有被引用时将会被gc机制回收, 实际上也就是回收与这个coroutine(thread)相关联的lua_State内存.
+
+虽然Programming in Lua中说当一个thread的lua_State被回收后, 再去操作这个被回收的lua_State时会导致代码崩溃.
+但是为了测试目的的明确性, 测试代码很简单, lua_State所占用的内存释放后, 不会有其他代码去改变这块内存, 那么去使用被释放掉lua_State也就不太可能会存在崩溃的问题.
+
+为了证明不被引用的lua_State确实会被回收, 只好先在lua中创建一个coroutine, 并在此coroutine的最后调用一个C函数. 在这个被coroutine调用的C函数的最后强制执行gc, 并打印出当前的内存使用量.
+当此C函数执行完毕时, 这个coroutine也就执行结束了. 然后在C代码的main函数中再次强制执行gc然后打印出当前内存使用量, 发现内存用确实变少了,
+由此可证明使用coroutine.create创建的coroutine在执行结束(没有外部引用)时确实可以被gc回收.
+
+假设在lua中的某一个coroutine(不是主线程)去调用C函数来保存当前虚拟机的lua_State以便将来另一段C代码可以使用. 如果在C代码中直接将参数传递过来的lua_State保存下来就可能会出现使用非法的lua_State的问题.
+因为此时传入C代码的指针是与这个coroutine相关联的lua_State, 并非是使用luaL_newstate创建的lua_State, 这个coroutine在执行完之后可能就结束了, 那么与之相关联的lua_State就可能会被gc回收掉.
+当下次某个函数去使用保存下来的lua_State时, 由于这个被保存下来的lua_State实际上已经被gc回收掉了, 程序就可能会出现各种奇怪的问题.
+
+为了安全起见, 如果要存储某个lua_State以备未来某个时刻使用, 就一定要存储主线程的lua_State. 因为除了调用lua_close外主线程将一直存在.
+在当前coroutine环境下获取主线程的lua_State可以使用如下代码:
+lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_MAINTHREAD);
+lua_State *L = lua_tothread(L, -1);
+lua_pop(L, 1);

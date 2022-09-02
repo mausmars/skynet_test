@@ -1,0 +1,11 @@
+github下载lua5.3 源码编译
+
+apt-get install luarocks
+
+拷贝lua代码到 /usr/include/lua5.3
+
+执行
+luarocks install luafilesystem
+
+生成
+/usr/local/lib/lua/5.3/lfs.so
