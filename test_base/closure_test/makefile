@@ -2,14 +2,14 @@ CC ?= gcc
 CFLAGS = -g -O2 -Wall -I$(LUA_INC)
 SHARED := -fPIC --shared
 
-TARGET = cb.so
+TARGET = closure.so
 
 # 引入lua头文件
-LUA_INC = ../../3rd/lua
+LUA_INC = /software/lua
 
 start: $(TARGET)
 
-$(TARGET) : cb.c | $(LUA_CLIB_PATH)
+$(TARGET) : closure.c | $(LUA_CLIB_PATH)
 	$(CC) $(CFLAGS) $(SHARED) $^ -o $@ -lpthread && cp $(TARGET) ../../luaclib
 
 clean:
