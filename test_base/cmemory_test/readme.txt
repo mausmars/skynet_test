@@ -1,0 +1,1 @@
+./skynet test_base/cmemory_test/config

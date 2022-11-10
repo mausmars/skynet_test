@@ -1,0 +1,1 @@
+./skynet test_base/snapshot_test/config
