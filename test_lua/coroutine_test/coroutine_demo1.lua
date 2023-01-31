@@ -3,8 +3,6 @@ local function foo(a)
     return coroutine.yield(2 * a)
 end
 
-local CoroutineContext = {}
-
 local task = function(a, b)
     print(coroutine.running())
     print("task_1 ", a, b)
@@ -23,6 +21,12 @@ print("co1 " .. tostring(co1))
 
 local co2 = coroutine.create(task)
 print("co2 " .. tostring(co2))
+
+print("main", coroutine.resume(co1, 1, 11))
+print("main", coroutine.resume(co2, 2, 22))
+
+print("main", coroutine.resume(co1, 1, 11))
+print("main", coroutine.resume(co2, 2, 22))
 
 print("main", coroutine.resume(co1, 1, 11))
 print("main", coroutine.resume(co2, 2, 22))

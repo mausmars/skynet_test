@@ -26,15 +26,15 @@ int cclosure1(lua_State *L) {
     return 1;
 }
 
- /* 闭包产生器 */
+/* 闭包产生器 */
 int lcreateclosure1(lua_State *L) {
     int v1 = luaL_checkinteger(L, 1);
     int v2 = luaL_checkinteger(L, 2);
 
-    lua_pushnumber(L, v1);             /* 压入第一个upvalue */
-    lua_pushnumber(L, v2);             /* 压入第二个upvalue */
-    lua_pushcclosure(L, cclosure1, 2); /* 压入闭包的同时也把upvalue置入该闭包的upvalue表 */
-    return 1;                         /* 返回闭包 */
+    lua_pushnumber(L, v1);              /* 压入第一个upvalue */
+    lua_pushnumber(L, v2);              /* 压入第二个upvalue */
+    lua_pushcclosure(L, cclosure1, 2);  /* 压入闭包的同时也把upvalue置入该闭包的upvalue表 */
+    return 1;                           /* 返回闭包 */
 }
 
 //-----------------------------------------------
