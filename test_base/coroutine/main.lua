@@ -40,4 +40,6 @@ end
 skynet.start(function()
     --test1()
     test2()
+
+    print("time= ", skynet.time())
 end)
