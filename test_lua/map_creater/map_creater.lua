@@ -41,6 +41,20 @@ local RuleType = {
     Cross = 2, -- 十字策略
 }
 
+-- 事件类型
+local EventType = {
+    START = 0, -- 0-起点        无逻辑
+    FIGHT = 101, -- 101-普通战斗   对应 T_Stage 表
+    ELITE = 102, -- 102-精英战斗   对应 T_Stage 表
+    BOSS = 103, -- 103-boss      对应 T_Stage 表
+    HIDE = 104, -- 104-隐藏挑战   对应 T_Stage 表
+    BOX = 2, -- 2-宝箱         对应 T_Item 表
+    HEAL = 3, -- 3-治疗         对应 T_LairHeal 表
+    SUPPORT = 4, -- 4-支援龙       对应 T_LairSupport 表
+    TOWER = 5, -- 5-瞭望塔
+    EMPTY = 999, -- 999-空点
+}
+
 local MapPoint = {}
 
 --可联通格子的相对坐标
@@ -64,7 +78,10 @@ function MapPoint.new(x, y, mark)
     local data = {}
     data.x = x
     data.y = y
-    data.mark = mark --1联通，2末点，3起点
+    data.mark = mark                    -- 1联通，2末点，3起点
+    data.event_type = EventType.EMPTY   -- 事件类型
+
+    data.repeated_count = 1   -- 点的复用次数（可能被多条路径公用）
     return setmetatable(data, { __index = MapPoint })
 end
 
@@ -134,12 +151,14 @@ function PathContext.new(findContext, direction)
     local data = {}
     data.findContext = findContext
     data.path = {}      --记录路径
-    data.pathSize = 0     --路径长度
+    data.pathSize = 0   --路径长度
     data.step = 0       --记录步长（新加入的点才算）
     data.weight = { base_weight, base_weight, base_weight, base_weight }       --方向权重
     data.startDirection = direction    --起始方向
 
     data.weight[direction] = start_weight     --加大起始方向的权重
+
+    data.end_point_key = 0      --末点key
     return setmetatable(data, { __index = PathContext })
 end
 
@@ -153,6 +172,7 @@ function PathContext:initPath(startPoint)
         self.findContext:insertUsedPoint(newPoint, 1)
         self:insertPoint(newPoint, 1)
     else
+        mp.repeated_count = mp.repeated_count + 1
         self:insertPoint(newPoint, 0)
     end
 
@@ -162,6 +182,7 @@ function PathContext:initPath(startPoint)
         self.findContext:insertUsedPoint(newPoint, 1)
         self:insertPoint(newPoint, 1)
     else
+        mp.repeated_count = mp.repeated_count + 1
         self:insertPoint(newPoint, 0)
     end
 
@@ -202,6 +223,7 @@ function PathContext:insertPoint(point, isNew)
     end
     self.pathSize = self.pathSize + 1
     --print("插入PathContext key=" .. key)
+    return key
 end
 
 --回滾數據
@@ -215,18 +237,17 @@ end
 
 local MapCreater = {}
 
-function MapCreater.new(map_size)
+function MapCreater.new(mapSize, startPoint)
     local data = {}
-    data.mapSize = map_size     --地图大小
-    data.presetPoint = {}         --预设点
-    data.startPoint = {}
+    data.mapSize = mapSize              -- 地图大小
+    data.startPoint = startPoint        -- 起点
+    data.presetPoint = {}               -- 预设点
     return setmetatable(data, { __index = MapCreater })
 end
 
-function MapCreater:init(startPoint)
-    self.startPoint = startPoint
+function MapCreater:init()
     for _, rc in pairs(presetRelativeCoordinate) do
-        local key = createdKey(startPoint[1] + rc[1], startPoint[2] + rc[2])
+        local key = createdKey(self.startPoint[1] + rc[1], self.startPoint[2] + rc[2])
         self.presetPoint[key] = 1
     end
 end
@@ -299,13 +320,11 @@ function MapCreater:checkPoint(point, pathContext)
         --print("取点失败 地图越界 "..point[1]..","..point[2])
         return false
     end
-
     local usedPoint = pathContext.findContext:findUsedPoint(point)
     if usedPoint == nil and (not self:checkNewPointAround(point, pathContext.findContext)) then
         --如果是新点，周围的旧点不能大于2个
         return false
     end
-
     if pathContext.findContext.ruleType == RuleType.Cross then
         -- 十字规则才跳过预设点
         if not self:checkNewPointAroundPresetPoint(point, pathContext) then
@@ -313,19 +332,14 @@ function MapCreater:checkPoint(point, pathContext)
             return false
         end
     end
-
     if pathContext:contain(point) then
         --print("取点失败 当前路径包括该点 "..point[1]..","..point[2])
         return false
-    else
-
     end
-
     if not self:checkPointAround(point, pathContext.findContext) then
         --print("取点失败 点周围不符合要求 "..point[1]..","..point[2])
         return false
     end
-
     return true
 end
 
@@ -391,16 +405,17 @@ function MapCreater:findPath2(findContext, times, expectStep, totalStep)
             end
             break
         end
-        pathContext:insertPoint({ newMapPoint.x, newMapPoint.y }, isNewMapPoint and 1 or 0)
+        local key = pathContext:insertPoint({ newMapPoint.x, newMapPoint.y }, isNewMapPoint and 1 or 0)
 
         if pathContext.step >= expectStep then
             newMapPoint.mark = MarkType.End
+            pathContext.end_point_key = key
             --print("### 达到期望步数 修改mark为2 " .. newMapPoint.x .. "," .. newMapPoint.y)
             break
         end
-
         if findContext:usedPointSize() > totalStep then
             newMapPoint.mark = MarkType.End
+            pathContext.end_point_key = key
             --print("### 达到总步数 修改mark为2 " .. newMapPoint.x .. "," .. newMapPoint.y)
             break
         end
@@ -421,7 +436,7 @@ function MapCreater:findPath(findContext, times, expectStep, totalStep)
     return self:findPath2(findContext, times, expectStep, totalStep)
 end
 
-function MapCreater:findPaths(endCount, totalStep)
+function MapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range)
     --平均步数
     local averageStep = totalStep // endCount
     local remainder = totalStep % endCount
@@ -445,6 +460,11 @@ function MapCreater:findPaths(endCount, totalStep)
         table.insert(findContext.pathContexts, pathContext)
     end
 
+    self:printPoints(findContext)
+
+    -- 设置事件类型
+    self:set_event_type(findContext, fight_random_range, recovery_random_range)
+
     --if findContext.isSuccess then
     --打印地图
     self:printMap(findContext)
@@ -461,6 +481,94 @@ function MapCreater:createdKey(point)
     return createdKey(point[1], point[2])
 end
 
+-- 相连的点
+function MapCreater:connect_point_by_xy(x, y, path, points)
+    for _, v in pairs(self:relativeCoordinate()) do
+        local p = { x + v[1], y + v[2] }
+        local k = self:createdKey(p)
+        if path[k] ~= nil and points[k] == nil then
+            points[k] = 0
+            return k
+        end
+    end
+    return nil
+end
+
+-- 相连的点
+function MapCreater:connect_point_by_point(point, paths, points)
+    local x = point % 100
+    local y = point // 100
+    return self:connect_point_by_xy(x, y, paths, points)
+end
+
+-- 设置事件类型
+function MapCreater:set_event_type(findContext, fight_random_range, recovery_random_range)
+    --查找路徑最長的通路
+    local maxCountPath = nil
+    for _, pc in pairs(findContext.pathContexts) do
+        if maxCountPath == nil then
+            maxCountPath = pc
+        else
+            if maxCountPath.pathSize < pc.pathSize then
+                maxCountPath = pc
+            end
+        end
+    end
+
+    local is_set_tower = false  -- 是否设置过塔
+    local is_set_hide = false   -- 是否设置过隐藏关卡
+    for _, pc in pairs(findContext.pathContexts) do
+        local points = {} --防止放回走
+
+        local pointKey = createdKey(self.startPoint[1], self.startPoint[2])
+        points[pointKey] = 0
+        local mp = findContext.usedPoints[pointKey]
+        mp.event_type = EventType.START
+
+        local fight_step = math.random(fight_random_range[1], fight_random_range[2])
+        local fight_interval = 0
+        local recovery_step = math.random(recovery_random_range[1], recovery_random_range[2])
+        local index = 0
+
+        while (true) do
+            local k = self:connect_point_by_point(pointKey, pc.path, points)
+            if k ~= nil then
+                pointKey = k
+            else
+                break
+            end
+            index = index + 1
+            fight_interval = fight_interval + 1
+            if fight_interval == fight_step + 1 then
+                local mp = findContext.usedPoints[pointKey]
+                if mp.event_type == EventType.EMPTY then
+                    mp.event_type = EventType.FIGHT
+                end
+                fight_step = math.random(fight_random_range[1], fight_random_range[2])
+                fight_interval = 0
+            end
+
+            if index == pc.pathSize - (recovery_step) - 2 then
+                local mp = findContext.usedPoints[pointKey]
+                mp.event_type = EventType.HEAL
+            end
+        end
+        -- 抹点
+        local end_point = findContext.usedPoints[pointKey]
+        if maxCountPath == pc then
+            end_point.event_type = EventType.BOSS
+        elseif not is_set_tower then
+            end_point.event_type = EventType.TOWER
+            is_set_tower = true
+        elseif not is_set_hide then
+            end_point.event_type = EventType.HIDE
+            is_set_hide = true
+        else
+            end_point.event_type = EventType.ELITE
+        end
+    end
+end
+
 function MapCreater:printMap(findContext)
     print("-------------------------------------------")
     --查找路徑最長的通路
@@ -475,6 +583,7 @@ function MapCreater:printMap(findContext)
         end
     end
 
+    print("[#]EMPTY [S]START [@]FIGHT [B]boss关 [C]HIDE [E]ELITE [T]TOWER [H]HEAL")
     for y = 1, self.mapSize[2] do
         local row = ""
         for x = 1, self.mapSize[1] do
@@ -482,37 +591,45 @@ function MapCreater:printMap(findContext)
             local p = findContext.usedPoints[k]
             if p == nil then
                 row = row .. " "
-            elseif p.mark == MarkType.Unicom then
+            elseif p.event_type == EventType.EMPTY then
                 row = row .. "#"
-            elseif p.mark == MarkType.End then
-                if maxCountPath.path[k] ~= nil then
-                    row = row .. "b"
-                else
-                    row = row .. "e"
-                end
-            elseif p.mark == MarkType.Start then
-                row = row .. "s"
+            elseif p.event_type == EventType.BOSS then
+                row = row .. "B"
+            elseif p.event_type == EventType.ELITE then
+                row = row .. "E"
+            elseif p.event_type == EventType.START then
+                row = row .. "S"
+            elseif p.event_type == EventType.TOWER then
+                row = row .. "T"
+            elseif p.event_type == EventType.FIGHT then
+                row = row .. "@"
+            elseif p.event_type == EventType.HEAL then
+                row = row .. "H"
+            elseif p.event_type == EventType.HIDE then
+                row = row .. "C"
+            else
+                row = row .. "U"
             end
         end
         print(row)
     end
+    --self:printPoints(findContext)
 end
 
 function MapCreater:printPoints(findContext)
     print("---------------------------------")
     for k, v in pairs(findContext.usedPoints) do
-        print("打印地图点 " .. k .. " [" .. v.x .. "," .. v.y .. "] mark=" .. v.mark)
+        print("打印地图点 " .. k .. " [" .. v.x .. "," .. v.y .. "] mark=" .. v.mark .. " repeated_count=" .. v.repeated_count)
     end
 
     for k, pc in pairs(findContext.pathContexts) do
         print("--- path --")
         for k, v in pairs(pc.path) do
-            print("" .. k .. " ")
+            print("" .. k .. " " .. v)
         end
     end
 end
 
---
 local function init()
     --初始随机数
     math.randomseed(os.time())
@@ -521,25 +638,25 @@ end
 init()
 
 local function test()
-    local endCount = 8     -- 5 个结束点
-    local totalStep = 150     -- 15 个关卡
-    local startPoint = { 15, 15 }
-
-    --地图大小
-    local map_size = { 30, 30 }
+    local endCount = 5                  -- x个结束点
+    local totalStep = 100               -- x个关卡
+    local startPoint = { 15, 15 }       -- 起点坐标
+    local mapSize = { 30, 30 }          -- 地图大小
+    local fight_random_range = { 2, 4 }      -- 普通关卡间隔随机区间
+    local recovery_random_range = { 2, 5 }   -- 恢复池倒数格数随机区间
 
     local totalCount = 1
 
     local totalTime = 0
     local failCount = 0
 
-    local mapCreater = MapCreater.new(map_size)
-    mapCreater:init(startPoint)
+    local mapCreater = MapCreater.new(mapSize, startPoint)
+    mapCreater:init()
 
     local t0 = os.clock()
     for i = 1, totalCount do
         --print("--------------------------------------------------------------------------------------")
-        local findContext = mapCreater:findPaths(endCount, totalStep)
+        local findContext = mapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range)
         if not findContext.isSuccess then
             failCount = failCount + 1
         end
@@ -551,4 +668,3 @@ local function test()
 end
 
 test()
-
