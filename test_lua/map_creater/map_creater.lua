@@ -55,6 +55,14 @@ local EventType = {
     EMPTY = 999, -- 999-空点
 }
 
+-- 期望值类型
+local ExpectCountType = {
+    ELITE = 1, -- 精英
+    HIDE = 2, -- 隐藏挑战
+    TOWER = 3, -- 瞭望塔
+    HEAL = 4, -- 医疗
+}
+
 local MapPoint = {}
 
 --可联通格子的相对坐标
@@ -436,7 +444,7 @@ function MapCreater:findPath(findContext, times, expectStep, totalStep)
     return self:findPath2(findContext, times, expectStep, totalStep)
 end
 
-function MapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range)
+function MapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range, expect_counts)
     --平均步数
     local averageStep = totalStep // endCount
     local remainder = totalStep % endCount
@@ -463,7 +471,7 @@ function MapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_
     self:printPoints(findContext)
 
     -- 设置事件类型
-    self:set_event_type(findContext, fight_random_range, recovery_random_range)
+    self:set_event_type(findContext, fight_random_range, recovery_random_range, expect_counts)
 
     --if findContext.isSuccess then
     --打印地图
@@ -502,7 +510,7 @@ function MapCreater:connect_point_by_point(point, paths, points)
 end
 
 -- 设置事件类型
-function MapCreater:set_event_type(findContext, fight_random_range, recovery_random_range)
+function MapCreater:set_event_type(findContext, fight_random_range, recovery_random_range, expectcounts)
     --查找路徑最長的通路
     local maxCountPath = nil
     for _, pc in pairs(findContext.pathContexts) do
@@ -515,8 +523,7 @@ function MapCreater:set_event_type(findContext, fight_random_range, recovery_ran
         end
     end
 
-    local is_set_tower = false  -- 是否设置过塔
-    local is_set_hide = false   -- 是否设置过隐藏关卡
+    local counts = { 0, 0, 0, 0 }
     for _, pc in pairs(findContext.pathContexts) do
         local points = {} --防止放回走
 
@@ -549,22 +556,28 @@ function MapCreater:set_event_type(findContext, fight_random_range, recovery_ran
             end
 
             if index == pc.pathSize - (recovery_step) - 2 then
-                local mp = findContext.usedPoints[pointKey]
-                mp.event_type = EventType.HEAL
+                if counts[ExpectCountType.HEAL] < expectcounts[ExpectCountType.HEAL] then
+                    local mp = findContext.usedPoints[pointKey]
+                    mp.event_type = EventType.HEAL
+                    counts[ExpectCountType.HEAL] = counts[ExpectCountType.HEAL] + 1
+                end
             end
         end
-        -- 抹点
+        -- 末点
         local end_point = findContext.usedPoints[pointKey]
         if maxCountPath == pc then
             end_point.event_type = EventType.BOSS
-        elseif not is_set_tower then
-            end_point.event_type = EventType.TOWER
-            is_set_tower = true
-        elseif not is_set_hide then
+        elseif counts[ExpectCountType.HIDE] < expectcounts[ExpectCountType.HIDE] then
             end_point.event_type = EventType.HIDE
-            is_set_hide = true
-        else
+            counts[ExpectCountType.HIDE] = counts[ExpectCountType.HIDE] + 1
+        elseif counts[ExpectCountType.TOWER] < expectcounts[ExpectCountType.TOWER] then
+            end_point.event_type = EventType.TOWER
+            counts[ExpectCountType.TOWER] = counts[ExpectCountType.TOWER] + 1
+        elseif counts[ExpectCountType.ELITE] < expectcounts[ExpectCountType.ELITE] then
             end_point.event_type = EventType.ELITE
+            counts[ExpectCountType.ELITE] = counts[ExpectCountType.ELITE] + 1
+        else
+            end_point.event_type = EventType.BOX
         end
     end
 end
@@ -583,7 +596,12 @@ function MapCreater:printMap(findContext)
         end
     end
 
-    print("[#]EMPTY [S]START [@]FIGHT [B]boss关 [C]HIDE [E]ELITE [T]TOWER [H]HEAL")
+    print("[#]EMPTY [S]START [@]FIGHT [B]boss关 [C]HIDE [E]ELITE [T]TOWER [H]HEAL [X]BOX")
+    if findContext.isSuccess then
+        print("Success!")
+    else
+        print("Fail!")
+    end
     for y = 1, self.mapSize[2] do
         local row = ""
         for x = 1, self.mapSize[1] do
@@ -607,6 +625,8 @@ function MapCreater:printMap(findContext)
                 row = row .. "H"
             elseif p.event_type == EventType.HIDE then
                 row = row .. "C"
+            elseif p.event_type == EventType.BOX then
+                row = row .. "X"
             else
                 row = row .. "U"
             end
@@ -638,12 +658,13 @@ end
 init()
 
 local function test()
-    local endCount = 5                  -- x个结束点
-    local totalStep = 100               -- x个关卡
+    local endCount = 8                  -- x个结束点
+    local totalStep = 170               -- x个格子
     local startPoint = { 15, 15 }       -- 起点坐标
     local mapSize = { 30, 30 }          -- 地图大小
     local fight_random_range = { 2, 4 }      -- 普通关卡间隔随机区间
     local recovery_random_range = { 2, 5 }   -- 恢复池倒数格数随机区间
+    local expect_counts = { 2, 1, 1, 6 }        -- 期望值（精英|隐藏挑战|瞭望台|治疗）
 
     local totalCount = 1
 
@@ -656,7 +677,7 @@ local function test()
     local t0 = os.clock()
     for i = 1, totalCount do
         --print("--------------------------------------------------------------------------------------")
-        local findContext = mapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range)
+        local findContext = mapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range, expect_counts)
         if not findContext.isSuccess then
             failCount = failCount + 1
         end
