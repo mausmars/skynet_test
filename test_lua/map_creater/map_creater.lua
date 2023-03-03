@@ -509,6 +509,40 @@ function MapCreater:connect_point_by_point(point, paths, points)
     return self:connect_point_by_xy(x, y, paths, points)
 end
 
+-- 周围点是否包含战斗点
+function MapCreater:around_point_contain_fight(x, y, usedPoints, step)
+    local points = {}
+    local k = self:createdKey({ x, y })
+    points[k] = 0
+    return self:around_point_contain_fight2(x, y, usedPoints, step, points)
+end
+
+function MapCreater:around_point_contain_fight2(x, y, usedPoints, step, points)
+    if step <= 0 then
+        return false
+    end
+    local is_contain = false
+    for _, v in pairs(self:relativeCoordinate()) do
+        local p = { x + v[1], y + v[2] }
+        local k = self:createdKey(p)
+        if points[k] == nil then
+            points[k] = 0
+            local mp = usedPoints[k]
+            if mp ~= nil and mp.event_type == EventType.FIGHT then
+                is_contain = true
+                break
+            end
+            local is_c = self:around_point_contain_fight2(p[1], p[2], usedPoints, step - 1, points)
+            if is_c then
+                is_contain = is_c
+                break
+            end
+        end
+
+    end
+    return is_contain
+end
+
 -- 设置事件类型
 function MapCreater:set_event_type(findContext, fight_random_range, recovery_random_range, expectcounts)
     --查找路徑最長的通路
@@ -546,13 +580,14 @@ function MapCreater:set_event_type(findContext, fight_random_range, recovery_ran
             end
             index = index + 1
             fight_interval = fight_interval + 1
-            if fight_interval == fight_step + 1 then
+            if fight_interval >= fight_step + 1 then
                 local mp = findContext.usedPoints[pointKey]
-                if mp.event_type == EventType.EMPTY then
+                if mp.event_type == EventType.EMPTY and not self:around_point_contain_fight(mp.x, mp.y, findContext.usedPoints, fight_random_range[1]) then
                     mp.event_type = EventType.FIGHT
+
+                    fight_step = math.random(fight_random_range[1], fight_random_range[2])
+                    fight_interval = 0
                 end
-                fight_step = math.random(fight_random_range[1], fight_random_range[2])
-                fight_interval = 0
             end
 
             if index == pc.pathSize - (recovery_step) - 2 then
