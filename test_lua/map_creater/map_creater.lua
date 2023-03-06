@@ -444,7 +444,7 @@ function MapCreater:findPath(findContext, times, expectStep, totalStep)
     return self:findPath2(findContext, times, expectStep, totalStep)
 end
 
-function MapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range, expect_counts)
+function MapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range, expect_counts, endpoint_eventtype)
     --平均步数
     local averageStep = totalStep // endCount
     local remainder = totalStep % endCount
@@ -471,7 +471,7 @@ function MapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_
     self:printPoints(findContext)
 
     -- 设置事件类型
-    self:set_event_type(findContext, fight_random_range, recovery_random_range, expect_counts)
+    self:set_event_type(findContext, fight_random_range, recovery_random_range, expect_counts, endpoint_eventtype)
 
     --if findContext.isSuccess then
     --打印地图
@@ -544,7 +544,7 @@ function MapCreater:around_point_contain_fight2(x, y, usedPoints, step, points)
 end
 
 -- 设置事件类型
-function MapCreater:set_event_type(findContext, fight_random_range, recovery_random_range, expectcounts)
+function MapCreater:set_event_type(findContext, fight_random_range, recovery_random_range, expectcounts, endpoint_eventtype)
     --查找路徑最長的通路
     local maxCountPath = nil
     for _, pc in pairs(findContext.pathContexts) do
@@ -612,7 +612,7 @@ function MapCreater:set_event_type(findContext, fight_random_range, recovery_ran
             end_point.event_type = EventType.ELITE
             counts[ExpectCountType.ELITE] = counts[ExpectCountType.ELITE] + 1
         else
-            end_point.event_type = EventType.BOX
+            end_point.event_type = endpoint_eventtype
         end
     end
 end
@@ -699,7 +699,8 @@ local function test()
     local mapSize = { 30, 30 }          -- 地图大小
     local fight_random_range = { 2, 4 }      -- 普通关卡间隔随机区间
     local recovery_random_range = { 2, 5 }   -- 恢复池倒数格数随机区间
-    local expect_counts = { 2, 1, 1, 6 }        -- 期望值（精英|隐藏挑战|瞭望台|治疗）
+    local expect_counts = { 0, 1, 1, 6 }        -- 期望值（精英|隐藏挑战|瞭望台|治疗）
+    local endpoint_eventtype = 101  -- 默认末点补齐类型 参看EventType
 
     local totalCount = 1
 
@@ -712,7 +713,7 @@ local function test()
     local t0 = os.clock()
     for i = 1, totalCount do
         --print("--------------------------------------------------------------------------------------")
-        local findContext = mapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range, expect_counts)
+        local findContext = mapCreater:findPaths(endCount, totalStep, fight_random_range, recovery_random_range, expect_counts, endpoint_eventtype)
         if not findContext.isSuccess then
             failCount = failCount + 1
         end
