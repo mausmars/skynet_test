@@ -142,6 +142,3 @@ int main(int argc, char **argv) {
     je_mallctl("prof.dump", NULL, NULL, &fileName, sizeof(const char *));
     return 0;
 }
-
-
-
