@@ -23,9 +23,15 @@ print("797638135 ", GET_GS_ID(797638135))
 
 print("797661633 ", GET_GS_ID(797661633))
 
+print("3964640 ", GET_GS_ID(3964640))
+
+print("813157343 ", GET_GS_ID(813157343))
+
 -- 815091358
 
 --local AutoGenConfig_Battle = { md5 = "8f2c4a276924dd4346bdb0aa71c39a46" } return AutoGenConfig_Battle
 
 --
 --local AutoGenConfig_Battle = { md5 = "c91e96a348c1721d16f52afac1d5524a" } return AutoGenConfig_Battle
+
+--pid:816937593 check_client_version cur_version ~= v 8f2c4a276924dd4346bdb0aa71c39a46~=version:21faa41e011352de6de2c1ab246ded9f
