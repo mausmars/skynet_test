@@ -62,8 +62,9 @@ function RedisService:unsubscribe(channel)
     print("redisService unsubscribe!")
     local watchwrap = self.channel_watchs[channel]
     if watchwrap ~= nil then
-        watchwrap.watch:unsubscribe(channel)
         watchwrap.is_close = true
+        watchwrap.watch:unsubscribe(channel)
+        watchwrap.watch:disconnect()    -- 关闭 watch 链接
         self.channel_watchs[channel] = nil
     end
 end
