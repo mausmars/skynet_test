@@ -50,7 +50,7 @@ local function create_context(id)
         id = id, --测试id
         times = 0, --执行次数
         state = 1, --运行状态 1运行 0停止
-        total_times = 1 * 10000, --调用总次数
+        total_times = 1 * 50, --调用总次数
     }
     return test_context
 end

@@ -1,6 +1,23 @@
 local skynet = require "skynet"
 local stm = require "skynet.stm"
 
+local gc_count = 0
+
+local function data_gc(self)
+    --print("data_gc", self)
+    gc_count = gc_count + 1
+end
+
+local Data = {}
+
+function Data.new(name, age)
+    local data = {}
+    data.name = name
+    data.age = age
+    data.members = {}
+    return setmetatable(data, { __index = Data, __gc = data_gc })
+end
+
 local Service = {}
 
 function Service.new()
@@ -11,6 +28,9 @@ end
 
 function Service:startup()
     print("Service1 startup!")
+    -- 停止gc
+    --collectgarbage("stop")
+    print("Service1 gc state !", collectgarbage("isrunning"))
 end
 
 function Service:shutdown()
@@ -18,11 +38,7 @@ function Service:shutdown()
 end
 
 function Service:create_data()
-    local data = {
-        name = "test",
-        age = 10,
-        members = {},
-    }
+    local data = Data.new("test", 10)
     for i = 1, 1000 do
         table.insert(data.members, { name = "member_" .. tostring(i), age = i })
     end
@@ -34,9 +50,7 @@ function Service:test1()
     local data = self:create_data()
     local stm_obj = stm.new(skynet.pack(data))
     local pointer = stm.copy(stm_obj)
-
-    self.stm_objs[pointer] = stm_obj
-
+    --self.stm_objs[pointer] = stm_obj
     return pointer
 end
 
@@ -45,8 +59,18 @@ function Service:gc()
     skynet.fork(function()
         while true do
             skynet.sleep(100 * 5)
-            collectgarbage "collect"
+            collectgarbage("collect")
             print("Service1 gc ", self:time2date())
+        end
+    end)
+end
+
+function Service:print_gc_count()
+    print("Service1 print_gc_count!")
+    skynet.fork(function()
+        while true do
+            print("Service1 gc_count=", gc_count, collectgarbage("count"), self:time2date())
+            skynet.sleep(1)
         end
     end)
 end
@@ -71,6 +95,8 @@ end
 skynet.start(function()
     service:startup()
 
+    service:print_gc_count()
+
     skynet.dispatch("lua", function(session, source, cmd, ...)
         local f = CMD[tostring(cmd)]
         if f then
@@ -82,6 +108,5 @@ skynet.start(function()
             print("unknown command %s", tostring(cmd))
         end
     end)
-
     --service:gc()
 end)

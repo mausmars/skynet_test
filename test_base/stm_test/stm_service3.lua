@@ -21,7 +21,7 @@ function Service:test1(id)
     local ret = skynet.call(".stm_service2_" .. id, "lua", "test1")
     local obj = self:rank_data_unpack(ret)
     if obj ~= nil then
-        print("Service3 id=" .. id .. " name=" .. obj.name)
+        --print("Service3 id=" .. id .. " name=" .. obj.name)
     else
         print("Service3 obj=nil id=" .. id)
     end
@@ -31,9 +31,9 @@ function Service:test2(id)
     local ret = skynet.call(".stm_service1", "lua", "test1")
     local obj = self:rank_data_unpack(ret)
     if obj ~= nil then
-        print("Service3 id=" .. id .. " name=" .. obj.name)
+        --print("Service3 id=" .. id .. " name=" .. obj.name)
     else
-        print("Service3 obj=nil id=" .. id)
+        --print("Service3 obj=nil id=" .. id)
     end
 end
 
@@ -45,7 +45,7 @@ function Service:rank_data_unpack(t)
     end)
     --LOG_DEBUG("Service3 rank_data_unpack, ok=%s", ok)
     if not ok or not data then
-        print("rank_data_unpack, ok=" .. tostring(ok) .. " data=", data, self:time2date())
+        print("rank_data_unpack, ok=" .. tostring(ok) .. " t=" .. tostring(t) .. " data=", data, self:time2date())
         return nil
     end
     return data

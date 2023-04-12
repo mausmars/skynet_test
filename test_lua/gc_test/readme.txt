@@ -8,3 +8,13 @@ collectgarbage("setstepmul"): 返回 步进倍率 的前一个值。
 collectgarbage("step"): 单步运行垃圾收集器。 步长"大小"由 arg 控制。传入 0 时，收集器步进（不可分割的）一步。传入非 0 值，收集器收集相当于 Lua 分配这些多（K 字节）内存的工作。如果收集器结束一个循环将返回 true。
 collectgarbage("stop"): 停止垃圾收集器的运行。在调用重启前，收集器只会因显式的调用运行。
 
+---------------------------------------------------------------------------
+https://lecoding.com/post/2017/lua-gc-paramter-internal/
+lua gc 调优主要涉及到两个两个参数setpause和setstepmul，使用方法如下：
+
+collectgarbage("setpause", 200)
+collectgarbage("setstepmul", 200)
+这两个值的默认值都是200
+
+
+
