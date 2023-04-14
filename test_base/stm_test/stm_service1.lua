@@ -48,8 +48,12 @@ end
 function Service:test1()
     --print("Service1 test1!")
     local data = self:create_data()
-    local stm_obj = stm.new(skynet.pack(data))
+
+    local msg, mz = skynet.pack(data)
+    print("test1 msg=", msg)
+    local stm_obj = stm.new(msg, mz)
     local pointer = stm.copy(stm_obj)
+    print("test1 pointer=", pointer)
     --self.stm_objs[pointer] = stm_obj
     return pointer
 end
@@ -95,7 +99,7 @@ end
 skynet.start(function()
     service:startup()
 
-    service:print_gc_count()
+    --service:print_gc_count()
 
     skynet.dispatch("lua", function(session, source, cmd, ...)
         local f = CMD[tostring(cmd)]

@@ -16,5 +16,3 @@ collectgarbage("setpause", 200)
 collectgarbage("setstepmul", 200)
 这两个值的默认值都是200
 
-
-
