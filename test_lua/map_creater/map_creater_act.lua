@@ -639,46 +639,54 @@ function MapCreater:printMap(findContext)
     else
         print("Fail!")
     end
-    for y = 1, self.mapSize[2] do
+    for y = 0, self.mapSize[2] do
         local row = ""
-        for x = 1, self.mapSize[1] do
-            local k = createdKey(x, y)
-            local p = findContext.usedPoints[k]
-            if p == nil then
-                row = row .. " "
-            elseif p.event_type == EventType.EMPTY then
-                row = row .. "#"
-            elseif p.event_type == EventType.BOSS then
-                row = row .. "B"
-            elseif p.event_type == EventType.ELITE then
-                row = row .. "E"
-            elseif p.event_type == EventType.START then
-                row = row .. "*"
-            elseif p.event_type == EventType.NPC1 then
-                row = row .. "N"
-            elseif p.event_type == EventType.FIGHT then
-                row = row .. "@"
-            elseif p.event_type == EventType.STONE then
-                row = row .. "S"
-            elseif p.event_type == EventType.BOX then
-                row = row .. "X"
+        for x = 0, self.mapSize[1] do
+            if y == 0 then
+                row = row .. x % 10
             else
-                row = row .. "U"
+                if x == 0 then
+                    row = row .. y % 10
+                else
+                    local k = createdKey(x, y)
+                    local p = findContext.usedPoints[k]
+                    if p == nil then
+                        row = row .. " "
+                    elseif p.event_type == EventType.EMPTY then
+                        row = row .. "#"
+                    elseif p.event_type == EventType.BOSS then
+                        row = row .. "B"
+                    elseif p.event_type == EventType.ELITE then
+                        row = row .. "E"
+                    elseif p.event_type == EventType.START then
+                        row = row .. "*"
+                    elseif p.event_type == EventType.NPC1 then
+                        row = row .. "N"
+                    elseif p.event_type == EventType.FIGHT then
+                        row = row .. "@"
+                    elseif p.event_type == EventType.STONE then
+                        row = row .. "S"
+                    elseif p.event_type == EventType.BOX then
+                        row = row .. "X"
+                    else
+                        row = row .. "U"
+                    end
+                end
             end
         end
         print(row)
     end
 
-    --print("坐标id 事件类型 事件参数自己配吧")
-    --for y = 1, self.mapSize[2] do
-    --    for x = 1, self.mapSize[1] do
-    --        local k = createdKey(x, y)
-    --        local p = findContext.usedPoints[k]
-    --        if p ~= nil then
-    --            print(k .. " " .. p.event_type)
-    --        end
-    --    end
-    --end
+    print("坐标id 事件类型 事件参数自己配吧")
+    for y = 1, self.mapSize[2] do
+        for x = 1, self.mapSize[1] do
+            local k = createdKey(x, y)
+            local p = findContext.usedPoints[k]
+            if p ~= nil then
+                print(k .. " " .. p.event_type)
+            end
+        end
+    end
     --self:printPoints(findContext)
 end
 
@@ -706,14 +714,14 @@ init()
 local function test()
     local endCount = 5                  -- x个结束点
     local totalStep = 40               -- x个格子
-    local startPoint = { 5, 5 }       -- 起点坐标
-    local mapSize = { 10, 10 }          -- 地图大小
+    local startPoint = { 6, 6 }       -- 起点坐标
+    local mapSize = { 12, 12 }          -- 地图大小
     local fight_random_range = { 1, 2 } -- 普通关卡间隔随机区间
     local stone_random_range = { 1, 2 }   -- 巨石倒数格数随机区间
     local expect_counts = { 12, 2, 1, 1, 1 }    -- 期望值（普通|巨石|冰冻npc1|冰冻npc2）
     local endpoint_eventtype = 999  -- 默认末点补齐类型 参看EventType
 
-    local totalCount = 10
+    local totalCount = 1
 
     local totalTime = 0
     local failCount = 0
