@@ -1,0 +1,13 @@
+文件导入docker
+docker ps -a
+
+拿到ID全称
+docker inspect -f '{{.Id}}' Names
+docker inspect -f '{{.Id}}' p-server_91
+输出结果
+0386004ec5336fc0d4c45a2be43da059b2b49f7b278a873662d0ddd8dd879e7f
+
+拷贝文件进docker
+docker cp gm_ban.py 0386004ec5336fc0d4c45a2be43da059b2b49f7b278a873662d0ddd8dd879e7f:/tmp
+
+

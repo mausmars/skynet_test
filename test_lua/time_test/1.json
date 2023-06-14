@@ -1,0 +1,39 @@
+{
+  "season": {
+    "season_id": 3,
+    "state": 1,
+    "features": [
+      {
+        "rank_tid": 1,
+        "feature_tid": 1
+      },
+      {
+        "rank_tid": 2,
+        "feature_tid": 1
+      },
+      {
+        "rank_tid": 3,
+        "feature_tid": 3
+      },
+      {
+        "rank_tid": 4,
+        "feature_tid": 6
+      }
+    ],
+    "season_updata_time": 1682870400,
+    "over_time": 1682888400
+  },
+  "rogue": {
+    "week_exp_limit": 2000,
+    "rank_rewards": {},
+    "level_exp": 0,
+    "level": 1,
+    "finished_rank_tids": {},
+    "scores": {},
+    "week_exp": 0,
+    "max_rank": 0,
+    "rewards": {},
+    "week_score": 0,
+    "keep_equips": {}
+  }
+}

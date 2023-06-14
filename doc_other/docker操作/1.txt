@@ -1,0 +1,5 @@
+send_msg(json.dumps({
+  "cmd": "dataCover",
+  "pid": "12267771",
+  "param": data,
+}))

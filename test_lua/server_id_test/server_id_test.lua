@@ -1,5 +1,10 @@
 local XOR_KEY = 2333333
 
+local XOR_KEY = 2333333
+function MAKE_PID(serverid, index)
+    return tostring(math.floor(index * 1000 + serverid) ~ XOR_KEY)
+end
+
 local function GET_GS_ID(pid)
     local pid_num = tonumber(pid)
     if not pid_num then
@@ -8,26 +13,19 @@ local function GET_GS_ID(pid)
     return math.floor((pid_num ~ XOR_KEY) % 1000)
 end
 
-print("814253414 ", GET_GS_ID(814253414))
-print("834010366 ", GET_GS_ID(834010366))
-print("868977753 ", GET_GS_ID(868977753))
-print("887864511 ", GET_GS_ID(887864511))
-print("797601151 ", GET_GS_ID(797601151))
+local function test1()
+    local pid = MAKE_PID(501, 6)
+    print("pid=", pid)
+    local server_id = GET_GS_ID(pid)
+    print("server_id=", server_id)
+    local si = math.floor(server_id / 100)
+    local server_index = si * 100
+    print("server_index=", server_index)
+end
 
---作弊
-print("875618284 ", GET_GS_ID(875618284))
-print("815091358 ", GET_GS_ID(815091358))
-print("893536407 ", GET_GS_ID(893536407))
-print("842525031 ", GET_GS_ID(842525031))
+test1()
 
---疑似作弊
-print("899708652 ", GET_GS_ID(899708652))
+print("-------------------------")
+print("25893036", GET_GS_ID(25893036))  --作弊了
+print("28875684", GET_GS_ID(28875684))  --作弊了
 
-
-
---local AutoGenConfig_Battle = { md5 = "8f2c4a276924dd4346bdb0aa71c39a46" } return AutoGenConfig_Battle
-
---
---local AutoGenConfig_Battle = { md5 = "c91e96a348c1721d16f52afac1d5524a" } return AutoGenConfig_Battle
-
---pid:816937593 check_client_version cur_version ~= v 8f2c4a276924dd4346bdb0aa71c39a46~=version:21faa41e011352de6de2c1ab246ded9f

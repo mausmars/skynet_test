@@ -1,0 +1,41 @@
+{
+  "type": 801,
+  "formation": {
+    "treasure_formation_id": 0,
+    "lock": 0,
+    "type": 801,
+    "positions": [
+      {
+        "card_id": 3009,
+        "card_type": 0,
+        "pos": 4
+      },
+      {
+        "card_id": 2001,
+        "card_type": 0,
+        "pos": 1
+      },
+      {
+        "card_id": 1005,
+        "card_type": 0,
+        "pos": 3
+      },
+      {
+        "card_id": 3004,
+        "card_type": 0,
+        "pos": 2
+      },
+      {
+        "card_id": 3006,
+        "card_type": 0,
+        "pos": 5
+      }
+    ],
+    "treasure_tids": [
+      111,
+      203,
+      301
+    ]
+  },
+  "stage_tid": 800004
+}
